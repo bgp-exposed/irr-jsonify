@@ -64,11 +64,6 @@ def download(irr_source, irr_current_serial):
         irr_dbs.append(f"./dbs/{filename}")
         return
 
-    f_serial.seek(0)
-    f_serial.write(str(current_serial))
-    f_serial.truncate()
-    f_serial.close()
-
     try:
         CHUNK = 16*1024
         d = zlib.decompressobj(zlib.MAX_WBITS|32)
@@ -81,6 +76,10 @@ def download(irr_source, irr_current_serial):
                 f_db.write(d.decompress(chungus))
 
         irr_dbs.append(f"./dbs/{filename}")
+        f_serial.seek(0)
+        f_serial.write(str(current_serial))
+        f_serial.truncate()
+        f_serial.close()
         print(f"Written {filename}")
     except Exception as e:
         print(f"Error on writing {filename}, error:\n{str(e)}")
