@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import_file = "./irr.db"
+serial_hash_file = "./IRR.SERIALHASH"
 export_file = "./irrdb.json"
 
 
@@ -18,6 +19,13 @@ def asdot_to_asplain(str):
     else:
         return None
 
+if not os.path.isfile(f"./{serial_hash_file}"):
+    print(f"./{serial_hash_file} does not exist, exiting")
+    exit(1)
+
+if not os.path.isfile(f"./{import_file}"):
+    print(f"./{import_file} does not exist, exiting")
+    exit(1)
 
 with open(export_file, "w") as f_out:
     f_out.writelines([
