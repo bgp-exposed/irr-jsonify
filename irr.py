@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 export_file = "./irr.db"
+serial_hash_file = "./IRR.SERIALHASH"
 
 from threading import Thread
 import urllib.request as request
@@ -8,6 +9,7 @@ import os
 import shutil
 import zlib
 import re
+import hashlib
 
 irr_sources = [
     ["ftp://irr.bboi.net/bboi.db.gz", "ftp://irr.bboi.net/BBOI.CURRENTSERIAL"],
@@ -35,6 +37,7 @@ irr_sources = [
 rx = re.compile(r"\.gz(ip)?$", re.IGNORECASE)
 
 irr_dbs = []
+irr_serials = []
 
 if not os.path.exists("./dbs"):
     os.mkdir("./dbs")
@@ -64,6 +67,7 @@ def download(irr_source, irr_current_serial):
     if not update:
         print(f"{filename} is up to date at serial {file_serial.strip()}, skipping")
         irr_dbs.append(f"./dbs/{filename}")
+        irr_serials.append(f"{filename}|{current_serial}")
         return
 
     print(f"{filename} is out of date at serial {file_serial.strip()} (current serial {current_serial}), downloading")
@@ -80,6 +84,7 @@ def download(irr_source, irr_current_serial):
                 f.write(d.decompress(chungus))
 
         irr_dbs.append(f"./dbs/{filename}")
+        irr_serials.append(f"{filename}|{current_serial}")
         
         f_serial.seek(0)
         f_serial.write(str(current_serial))
@@ -101,6 +106,27 @@ for irr_source in irr_sources:
 
 for thread in threads:
     thread.join()
+
+irr_serials.sort()
+current_serial_hash = int(hashlib.md5(",".join(irr_serials).encode('utf-8')).hexdigest(), 16)
+update = False
+f_serial_hash = None
+file_serial_hash = ""
+
+if os.path.isfile(f"./{serial_hash_file}"):
+    f_serial_hash = open(f"./{serial_hash_file}", "r+")
+    file_serial_hash = f_serial_hash.read()
+    if file_serial_hash == "" or int(file_serial_hash) < current_serial_hash:
+        update = True
+else:
+    f_serial_hash = open(f"./{serial_hash_file}", "w")
+    update = True
+
+if not update:
+    print(f"\n{serial_hash_file} is up to date with hash {file_serial_hash.strip()}, skipping")
+    exit()
+
+print(f"\n{export_file} is out of date, generating")
 
 with open(export_file, "w") as f_out:
     for irr_db in irr_dbs:
@@ -131,6 +157,11 @@ with open(export_file, "w") as f_out:
                 line = f_in.readline()
             print(f"Processed {cnt} line(s)")
 
-print(f"Written everything to {export_file}")
+f_serial_hash.seek(0)
+f_serial_hash.write(str(current_serial_hash))
+f_serial_hash.truncate()
+f_serial_hash.close()
+
+print(f"Wrote everything to {export_file}")
 
 os._exit(0)
