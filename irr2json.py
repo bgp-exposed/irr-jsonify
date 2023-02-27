@@ -38,6 +38,7 @@ with open(import_file, "r") as f:
     line = f.readline()
     ip = None
     originator = None
+    source = None
     next_proc_item = "route"
     cnt = 0
     while line:
@@ -57,8 +58,12 @@ with open(import_file, "r") as f:
                     originator = f"AS{val}"
                 else:
                     originator = f"AS{asdot_to_asplain(val)}"
+                next_proc_item = "source"
+            
+            if attrib.startswith("source"):
+                source = val.upper()
 
-        if ip and originator:
+        if ip and originator and source:
             if "." in ip:
                 maxlen = 24
                 prefixlen = 32
@@ -77,7 +82,7 @@ with open(import_file, "r") as f:
                     "asn": originator,
                     "prefix": ip,
                     "maxLength": maxlen,
-                    "ta": "irr-jsonify"
+                    "ta": source
                 })
                 cnt += 1
 
