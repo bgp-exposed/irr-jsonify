@@ -51,6 +51,7 @@ def download(irr_source, irr_current_serial):
 
     update = False
     f_serial = None
+    file_serial = "0"
     if os.path.isfile(f"./dbs/{serial_filename}") and os.path.isfile(f"./dbs/{filename}"):
         f_serial = open(f"./dbs/{serial_filename}", "r+")
         file_serial = f_serial.read()
@@ -61,26 +62,30 @@ def download(irr_source, irr_current_serial):
         update = True
 
     if not update:
+        print(f"{filename} is up to date at serial {file_serial.strip()}, skipping")
         irr_dbs.append(f"./dbs/{filename}")
         return
+
+    print(f"{filename} is out of date at serial {file_serial.strip()} (current serial {current_serial}), downloading")
 
     try:
         CHUNK = 16*1024
         d = zlib.decompressobj(zlib.MAX_WBITS|32)
         resp = request.urlopen(irr_source)
-        with open(f"./dbs/{filename}", "wb") as f_db:
+        with open(f"./dbs/{filename}", "wb") as f:
             while True:
                 chungus = resp.read(CHUNK)
                 if not chungus:
                     break
-                f_db.write(d.decompress(chungus))
+                f.write(d.decompress(chungus))
 
         irr_dbs.append(f"./dbs/{filename}")
+        
         f_serial.seek(0)
         f_serial.write(str(current_serial))
         f_serial.truncate()
         f_serial.close()
-        print(f"Written {filename}")
+        print(f"downloaded {filename}")
     except Exception as e:
         print(f"Error on writing {filename}, error:\n{str(e)}")
         if os.path.exists(f"./dbs/{serial_filename}"):
