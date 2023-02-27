@@ -19,21 +19,17 @@ irr_sources = [
     ["ftp://ftp.apnic.net/pub/apnic/whois/apnic.db.route.gz", "ftp://ftp.apnic.net/pub/apnic/whois/APNIC.CURRENTSERIAL"],
     ["ftp://ftp.radb.net/radb/dbase/radb.db.gz","ftp://ftp.radb.net/radb/dbase/RADB.CURRENTSERIAL"],
     ["http://ftp.afrinic.net/pub/dbase/afrinic.db.gz", "http://ftp.afrinic.net/pub/dbase/AFRINIC.CURRENTSERIAL"],
-    ["ftp://ftp.radb.net/radb/dbase/arin-nonauth.db.gz", "ftp://ftp.radb.net/radb/dbase/ARIN-NONAUTH.CURRENTSERIAL"],
     ["ftp://ftp.radb.net/radb/dbase/arin.db.gz","ftp://ftp.radb.net/radb/dbase/ARIN.CURRENTSERIAL"],
     ["ftp://ftp.altdb.net/pub/altdb/altdb.db.gz", "ftp://ftp.altdb.net/pub/altdb/ALTDB.CURRENTSERIAL"],
-    #"ftp.newaol.com/pub/aol-irr/dbase/aoltw.db.gz", # dead, confirmed
-    ["ftp://whois.in.bell.ca/bell.db.gz", "ftp://whois.in.bell.ca/BELL.CURRENTSERIAL"],
-    ["ftp://whois.canarie.ca/dbase/canarie.db.gz", "ftp://whois.canarie.ca/dbase/CURRENTSERIAL"],
-    #"ftp://irr-mirror.idnic.net/idnic.db.gz", # times out, confirmed
-    ["ftp://ftp.apnic.net/public/apnic/whois-data/JPIRR/jpirr.db.gz", "ftp://ftp.apnic.net/public/apnic/whois-data/JPIRR/JPIRR.CURRENTSERIAL"],
-    ["ftp://ftp.nestegg.net/irr/nestegg.db.gz", "ftp://ftp.nestegg.net/irr/NESTEGG.CURRENTSERIAL"],
+    ["ftp://ftp.radb.net/radb/dbase/bell.db.gz", "ftp://ftp.radb.net/radb/dbase/BELL.CURRENTSERIAL"],
+    ["ftp://ftp.radb.net/radb/dbase/canarie.db.gz", "ftp://ftp.radb.net/radb/dbase/CANARIE.CURRENTSERIAL"],
+    ["ftp://irr-mirror.idnic.net/idnic.db.gz", "ftp://irr-mirror.idnic.net/IDNIC.CURRENTSERIAL"],
+    ["ftp://ftp.nic.ad.jp/jpirr/jpirr.db.gz", "ftp://ftp.nic.ad.jp/jpirr/JPIRR.CURRENTSERIAL"],
     ["ftp://rr1.ntt.net/nttcomRR/nttcom.db.gz", "ftp://rr1.ntt.net/nttcomRR/NTTCOM.CURRENTSERIAL"],
-    ["ftp://ftp.openface.ca/pub/irr/openface.db.gz", "ftp://ftp.openface.ca/pub/irr/OPENFACE.CURRENTSERIAL"],
     ["ftp://ftp.panix.com/pub/rrdb/panix.db.gz", "ftp://ftp.panix.com/pub/rrdb/PANIX.CURRENTSERIAL"],
     ["ftp://ftp.ripe.net/ripe/dbase/split/ripe-nonauth.db.route6.gz", "ftp://ftp.ripe.net/ripe/dbase/RIPE-NONAUTH.CURRENTSERIAL"],
     ["ftp://ftp.ripe.net/ripe/dbase/split/ripe-nonauth.db.route.gz", "ftp://ftp.ripe.net/ripe/dbase/RIPE-NONAUTH.CURRENTSERIAL"],
-    ["ftp://ftp.bgp.net.br/dbase/tc.db.gz", "ftp://ftp.bgp.net.br/dbase/TC.CURRENTSERIAL"]
+    ["ftp://ftp.bgp.net.br/tc.db.gz", "ftp://ftp.bgp.net.br/TC.CURRENTSERIAL"]
 ]
 
 rx = re.compile(r"\.gz(ip)?$", re.IGNORECASE)
