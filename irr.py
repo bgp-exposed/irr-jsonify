@@ -118,6 +118,10 @@ with open(export_file, "w") as f_out:
                 elif line_text.startswith("origin:") and line_text.startswith(next_proc_item):
                     f_out.write(f"{line_text}")
                     cnt += 1
+                    next_proc_item = ("source:")
+                elif line_text.startswith("source:") and line_text.startswith(next_proc_item):
+                    f_out.write(f"{line_text}")
+                    cnt += 1
                     next_proc_item = ("route:", "route6:")
 
                 line = f_in.readline()

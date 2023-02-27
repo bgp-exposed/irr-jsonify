@@ -31,6 +31,7 @@ with open(export_file, "w") as f_out:
         line = f_in.readline()
         prefix = None
         asn = None
+        source = None
         next_proc_item = "route"
         cnt = 0
         while line:
@@ -50,8 +51,12 @@ with open(export_file, "w") as f_out:
                         asn = f"AS{val}"
                     else:
                         asn = f"AS{asdot_to_asplain(val)}"
+                    next_proc_item = "source"
 
-            if prefix and asn:
+                if attrib.startswith("source"):
+                    source = val.upper()
+
+            if prefix and asn and source:
                 if "." in prefix:
                     maxlen = 24
                     prefixlen = 32
@@ -66,7 +71,7 @@ with open(export_file, "w") as f_out:
                     prefixlen = int(prefix.split("/")[1])
 
                 if prefixlen <= maxlen:
-                    f_out.write(f"\n        {{\"asn\": \"{asn}\", \"prefix\": \"{prefix}\", \"maxLength\": {maxlen}, \"ta\": \"irr-jsonify\"}},")
+                    f_out.write(f"\n        {{\"asn\": \"{asn}\", \"prefix\": \"{prefix}\", \"maxLength\": {maxlen}, \"ta\": \"{source}\"}},")
                     proc_cnt += 1
                 prefix = None
                 asn = None
