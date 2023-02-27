@@ -93,13 +93,18 @@ with open(export_file, "w") as f_out:
             f_out.seek(pos, os.SEEK_SET)
             f_out.truncate()
 
+    serial_hash = ""
+    with open(serial_hash_file, 'r') as f_serial:
+        serial_hash = f_serial.read()
+
     f_out.writelines([
         "\n    ],\n",
         "    \"metadata\": {\n",
         "        \"builder\": \"irr2json\",\n",
         f"        \"generated\": {tm},\n",
         f"        \"valid\": {tm + 86400},\n",
-        f"        \"counts\": {proc_cnt}\n",
+        f"        \"counts\": {proc_cnt},\n",
+        f"        \"serial_hash\": {serial_hash}\n",
         "    }\n",
         "}"
     ])
