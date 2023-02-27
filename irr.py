@@ -50,35 +50,35 @@ def download(irr_source, irr_current_serial):
     current_serial = int(current_serial_req.read())
 
     update = False
-    f = None
+    f_serial = None
     if os.path.isfile(f"./dbs/{serial_filename}") and os.path.isfile(f"./dbs/{filename}"):
-        f = open(f"./dbs/{serial_filename}", "r+")
-        file_serial = f.read()
+        f_serial = open(f"./dbs/{serial_filename}", "r+")
+        file_serial = f_serial.read()
         if file_serial == "" or int(file_serial) < current_serial:
             update = True
     else:
-        f = open(f"./dbs/{serial_filename}", "w")
+        f_serial = open(f"./dbs/{serial_filename}", "w")
         update = True
 
     if not update:
         irr_dbs.append(f"./dbs/{filename}")
         return
 
-    f.seek(0)
-    f.write(str(current_serial))
-    f.truncate()
-    f.close()
+    f_serial.seek(0)
+    f_serial.write(str(current_serial))
+    f_serial.truncate()
+    f_serial.close()
 
     try:
         CHUNK = 16*1024
         d = zlib.decompressobj(zlib.MAX_WBITS|32)
         resp = request.urlopen(irr_source)
-        with open(f"./dbs/{filename}", "wb") as f:
+        with open(f"./dbs/{filename}", "wb") as f_db:
             while True:
                 chungus = resp.read(CHUNK)
                 if not chungus:
                     break
-                f.write(d.decompress(chungus))
+                f_db.write(d.decompress(chungus))
 
         irr_dbs.append(f"./dbs/{filename}")
         print(f"Written {filename}")
