@@ -27,6 +27,30 @@ if not os.path.isfile(f"./{import_file}"):
     print(f"./{import_file} does not exist, exiting")
     exit(1)
 
+irr_serial_hash = ""
+with open(serial_hash_file, 'r') as f_serial:
+    irr_serial_hash = f_serial.read()
+
+roa_serial_hash = ""
+if os.path.isfile(f"./{export_file}"):
+    with open(export_file, 'rb') as f:
+        f.seek(0, os.SEEK_END)
+        newlines = 0
+        while newlines < 3:
+            while f.read(1) != b'\n':
+                f.seek(-2, os.SEEK_CUR)
+            newlines += 1
+            f.seek(-2, os.SEEK_CUR)
+        ending = f.read()
+        # not very error-proof but oh well
+        roa_serial_hash = ending.decode('utf-8').translate({ord(i): None for i in ', {}\n'}).split(":")[1]
+
+if irr_serial_hash == roa_serial_hash:
+    print(f"{export_file} is up to date. nothing to do.")
+    exit()
+
+print(f"{export_file} is out of date, regenerating")
+
 with open(export_file, "w") as f_out:
     f_out.writelines([
         "{\n",
@@ -93,10 +117,6 @@ with open(export_file, "w") as f_out:
             f_out.seek(pos, os.SEEK_SET)
             f_out.truncate()
 
-    serial_hash = ""
-    with open(serial_hash_file, 'r') as f_serial:
-        serial_hash = f_serial.read()
-
     f_out.writelines([
         "\n    ],\n",
         "    \"metadata\": {\n",
@@ -104,7 +124,7 @@ with open(export_file, "w") as f_out:
         f"        \"generated\": {tm},\n",
         f"        \"valid\": {tm + 86400},\n",
         f"        \"counts\": {proc_cnt},\n",
-        f"        \"serial_hash\": {serial_hash}\n",
+        f"        \"serial_hash\": {irr_serial_hash}\n",
         "    }\n",
         "}"
     ])
