@@ -132,3 +132,4 @@ dbs/
 irr.db
 *.json
 *.lock
+*.SERIALHASH
