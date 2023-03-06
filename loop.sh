@@ -12,11 +12,14 @@ else
     int=$1
 fi
 
+# get containing folder
+dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+
 while true
 do
 	date
-	./irrdownload.py $IRR_DB $IRR_SERIALHASH $IRR_DB_FOLDER
-    ./irr2json.py $IRR_DB $IRR_SERIALHASH $IRR_JSON
+    $dir/irrdownload.py $IRR_DB $IRR_SERIALHASH $IRR_DB_FOLDER
+    $dir/irr2json.py $IRR_DB $IRR_SERIALHASH $IRR_JSON
     echo "Sleeping for $int seconds..."
 	sleep $int
 done
