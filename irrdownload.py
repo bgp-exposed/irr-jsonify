@@ -48,9 +48,6 @@ irr_serials = []
 if not os.path.exists(db_folder):
     os.mkdir(db_folder)
 
-if os.path.exists(export_file):
-    os.remove(export_file)
-
 def download(irr_source, irr_current_serial):
     gz_filename = irr_source.split("/")[-1]
     filename = rx.sub("", gz_filename)
@@ -133,6 +130,9 @@ if not update:
     exit()
 
 print(f"\n{export_file} is out of date, generating")
+
+if os.path.exists(export_file):
+    os.remove(export_file)
 
 with open(export_file, "w") as f_out:
     for irr_db in irr_dbs:
