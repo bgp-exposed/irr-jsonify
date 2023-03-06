@@ -2,8 +2,8 @@
 
 ```
 # fetch
-python3 irr.py
+./irrdownload.py irr.db IRR.SERIALHASH dbs
 
 # convert
-python3 irr2json.py
+./irr2json.py irr.db IRR.SERIALHASH irr.json
 ```
