@@ -14,7 +14,9 @@ fi
 
 while true
 do
+	date
 	./irrdownload.py $IRR_DB $IRR_SERIALHASH $IRR_DB_FOLDER
     ./irr2json.py $IRR_DB $IRR_SERIALHASH $IRR_JSON
+    echo "Sleeping for $int seconds..."
 	sleep $int
 done
