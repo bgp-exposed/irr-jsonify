@@ -55,6 +55,9 @@ if irr_serial_hash == roa_serial_hash:
 
 print(f"{export_file} is out of date, regenerating")
 
+if os.path.exists(export_file):
+    os.remove(export_file)
+
 with open(export_file, "w") as f_out:
     f_out.writelines([
         "{\n",
