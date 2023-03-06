@@ -116,7 +116,7 @@ file_serial_hash = ""
 if os.path.isfile(f"./{serial_hash_file}"):
     f_serial_hash = open(f"./{serial_hash_file}", "r+")
     file_serial_hash = f_serial_hash.read()
-    if file_serial_hash == "" or int(file_serial_hash) < current_serial_hash:
+    if file_serial_hash == "" or int(file_serial_hash) != current_serial_hash:
         update = True
 else:
     f_serial_hash = open(f"./{serial_hash_file}", "w")
