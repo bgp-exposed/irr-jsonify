@@ -9,5 +9,4 @@ ENV INTERVAL=600
 
 COPY irrdownload.py irr2json.py loop.sh /opt/
 
-#ENTRYPOINT ["/usr/bin/bash", "/opt/loop.sh"]
 ENTRYPOINT ["/bin/sh", "/opt/loop.sh"]
