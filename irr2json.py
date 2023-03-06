@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 
-import_file = "./irr.db"
-serial_hash_file = "./IRR.SERIALHASH"
-export_file = "./irrdb.json"
-
-
 import os
 import time
+import sys
+
+if len(sys.argv) != 4:
+    print("Usage:\nirr2json.py <irr.db> <IRR.SERIALHASH> <irr.json>")
+    exit(1)
+
+import_file = sys.argv[1]
+serial_hash_file = sys.argv[2]
+export_file = sys.argv[3]
 
 tm = int(time.time())
 

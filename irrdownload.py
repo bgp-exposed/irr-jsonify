@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-export_file = "./irr.db"
-serial_hash_file = "./IRR.SERIALHASH"
-
 from threading import Thread
 import urllib.request as request
 import os
@@ -10,6 +7,15 @@ import shutil
 import zlib
 import re
 import hashlib
+import sys
+
+if len(sys.argv) != 4:
+    print("Usage:\nirrdownload.py <irr.db> <IRR.SERIALHASH> <db_folder>")
+    exit(1)
+
+export_file = sys.argv[1]
+serial_hash_file = sys.argv[2]
+db_folder = sys.argv[3]
 
 irr_sources = [
     ["ftp://irr.bboi.net/bboi.db.gz", "ftp://irr.bboi.net/BBOI.CURRENTSERIAL"],
@@ -39,8 +45,8 @@ rx = re.compile(r"\.gz(ip)?$", re.IGNORECASE)
 irr_dbs = []
 irr_serials = []
 
-if not os.path.exists("./dbs"):
-    os.mkdir("./dbs")
+if not os.path.exists(db_folder):
+    os.mkdir(db_folder)
 
 if os.path.exists(export_file):
     os.remove(export_file)
@@ -55,18 +61,18 @@ def download(irr_source, irr_current_serial):
     update = False
     f_serial = None
     file_serial = "0"
-    if os.path.isfile(f"./dbs/{serial_filename}") and os.path.isfile(f"./dbs/{filename}"):
-        f_serial = open(f"./dbs/{serial_filename}", "r+")
+    if os.path.isfile(f"{db_folder}/{serial_filename}") and os.path.isfile(f"{db_folder}/{filename}"):
+        f_serial = open(f"{db_folder}/{serial_filename}", "r+")
         file_serial = f_serial.read()
         if file_serial == "" or int(file_serial) < current_serial:
             update = True
     else:
-        f_serial = open(f"./dbs/{serial_filename}", "w")
+        f_serial = open(f"{db_folder}/{serial_filename}", "w")
         update = True
 
     if not update:
         print(f"{filename} is up to date at serial {file_serial.strip()}, skipping")
-        irr_dbs.append(f"./dbs/{filename}")
+        irr_dbs.append(f"{db_folder}/{filename}")
         irr_serials.append(f"{filename}|{current_serial}")
         return
 
@@ -76,14 +82,14 @@ def download(irr_source, irr_current_serial):
         CHUNK = 16*1024
         d = zlib.decompressobj(zlib.MAX_WBITS|32)
         resp = request.urlopen(irr_source)
-        with open(f"./dbs/{filename}", "wb") as f:
+        with open(f"{db_folder}/{filename}", "wb") as f:
             while True:
                 chungus = resp.read(CHUNK)
                 if not chungus:
                     break
                 f.write(d.decompress(chungus))
 
-        irr_dbs.append(f"./dbs/{filename}")
+        irr_dbs.append(f"{db_folder}/{filename}")
         irr_serials.append(f"{filename}|{current_serial}")
         
         f_serial.seek(0)
@@ -93,10 +99,10 @@ def download(irr_source, irr_current_serial):
         print(f"downloaded {filename}")
     except Exception as e:
         print(f"Error on writing {filename}, error:\n{str(e)}")
-        if os.path.exists(f"./dbs/{serial_filename}"):
-            os.remove(f"./dbs/{serial_filename}")
-        if os.path.exists(f"./dbs/{filename}"):
-            os.remove(f"./dbs/{filename}")
+        if os.path.exists(f"{db_folder}/{serial_filename}"):
+            os.remove(f"{db_folder}/{serial_filename}")
+        if os.path.exists(f"{db_folder}/{filename}"):
+            os.remove(f"{db_folder}/{filename}")
 
 threads = []
 for irr_source in irr_sources:
