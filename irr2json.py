@@ -14,6 +14,7 @@ export_file = sys.argv[3]
 
 tm = int(time.time())
 
+
 def asdot_to_asplain(str):
     split = str.split(".")
     if len(split) == 2:
@@ -22,6 +23,7 @@ def asdot_to_asplain(str):
         return (dot * 65536) + add
     else:
         return None
+
 
 if not os.path.isfile(f"./{serial_hash_file}"):
     print(f"./{serial_hash_file} does not exist, exiting")

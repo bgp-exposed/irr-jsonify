@@ -3,7 +3,6 @@
 from threading import Thread
 import urllib.request as request
 import os
-import shutil
 import zlib
 import re
 import hashlib
@@ -25,9 +24,9 @@ irr_sources = [
     ["https://ftp.ripe.net/ripe/dbase/split/ripe.db.route.gz", "https://ftp.ripe.net/ripe/dbase/RIPE.CURRENTSERIAL"],
     ["ftp://ftp.apnic.net/pub/apnic/whois/apnic.db.route6.gz", "ftp://ftp.apnic.net/pub/apnic/whois/APNIC.CURRENTSERIAL"],
     ["ftp://ftp.apnic.net/pub/apnic/whois/apnic.db.route.gz", "ftp://ftp.apnic.net/pub/apnic/whois/APNIC.CURRENTSERIAL"],
-    ["ftp://ftp.radb.net/radb/dbase/radb.db.gz","ftp://ftp.radb.net/radb/dbase/RADB.CURRENTSERIAL"],
+    ["ftp://ftp.radb.net/radb/dbase/radb.db.gz", "ftp://ftp.radb.net/radb/dbase/RADB.CURRENTSERIAL"],
     ["http://ftp.afrinic.net/pub/dbase/afrinic.db.gz", "http://ftp.afrinic.net/pub/dbase/AFRINIC.CURRENTSERIAL"],
-    ["ftp://ftp.radb.net/radb/dbase/arin.db.gz","ftp://ftp.radb.net/radb/dbase/ARIN.CURRENTSERIAL"],
+    ["ftp://ftp.radb.net/radb/dbase/arin.db.gz", "ftp://ftp.radb.net/radb/dbase/ARIN.CURRENTSERIAL"],
     ["ftp://ftp.altdb.net/pub/altdb/altdb.db.gz", "ftp://ftp.altdb.net/pub/altdb/ALTDB.CURRENTSERIAL"],
     ["ftp://ftp.radb.net/radb/dbase/bell.db.gz", "ftp://ftp.radb.net/radb/dbase/BELL.CURRENTSERIAL"],
     ["ftp://ftp.radb.net/radb/dbase/canarie.db.gz", "ftp://ftp.radb.net/radb/dbase/CANARIE.CURRENTSERIAL"],
@@ -47,6 +46,7 @@ irr_serials = []
 
 if not os.path.exists(db_folder):
     os.mkdir(db_folder)
+
 
 def download(irr_source, irr_current_serial):
     gz_filename = irr_source.split("/")[-1]
@@ -76,8 +76,8 @@ def download(irr_source, irr_current_serial):
     print(f"{filename} is out of date at serial {file_serial.strip()} (current serial {current_serial}), downloading")
 
     try:
-        CHUNK = 16*1024
-        d = zlib.decompressobj(zlib.MAX_WBITS|32)
+        CHUNK = 16 * 1024
+        d = zlib.decompressobj(zlib.MAX_WBITS | 32)
         resp = request.urlopen(irr_source)
         with open(f"{db_folder}/{filename}", "wb") as f:
             while True:
@@ -101,9 +101,10 @@ def download(irr_source, irr_current_serial):
         if os.path.exists(f"{db_folder}/{filename}"):
             os.remove(f"{db_folder}/{filename}")
 
+
 threads = []
 for irr_source in irr_sources:
-    thread = Thread(target=download, args=(irr_source[0],irr_source[1]))
+    thread = Thread(target=download, args=(irr_source[0], irr_source[1]))
     thread.start()
     threads.append(thread)
 
@@ -144,7 +145,7 @@ with open(export_file, "w") as f_out:
             while line:
                 try:
                     line_text = line.decode().lower()
-                except Exception as e:
+                except Exception:
                     pass
 
                 if line_text.startswith(("route:", "route6:")) and line_text.startswith(next_proc_item):
