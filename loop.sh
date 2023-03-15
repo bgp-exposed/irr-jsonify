@@ -17,7 +17,8 @@ dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
 while true
 do
-	date
+	echo ""
+    date
     $dir/irrdownload.py $IRR_DB $IRR_SERIALHASH $IRR_DB_FOLDER
     $dir/irr2json.py $IRR_DB $IRR_SERIALHASH $IRR_JSON
     echo "Sleeping for $int seconds..."

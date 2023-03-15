@@ -14,6 +14,8 @@ export_file = sys.argv[3]
 
 tm = int(time.time())
 
+print("***** starting irr2json.py *****")
+
 
 def asdot_to_asplain(str):
     split = str.split(".")

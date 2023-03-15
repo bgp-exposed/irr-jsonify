@@ -39,6 +39,8 @@ irr_sources = [
     ["ftp://ftp.bgp.net.br/tc.db.gz", "ftp://ftp.bgp.net.br/TC.CURRENTSERIAL"]
 ]
 
+print("***** starting irrdownload.py *****")
+
 rx = re.compile(r"\.gz(ip)?$", re.IGNORECASE)
 
 irr_dbs = []
@@ -127,7 +129,7 @@ else:
     update = True
 
 if not update:
-    print(f"\n{serial_hash_file} is up to date with hash {file_serial_hash.strip()}, skipping")
+    print(f"{serial_hash_file} is up to date with hash {file_serial_hash.strip()}, skipping\n")
     exit()
 
 print(f"\n{export_file} is out of date, generating")
@@ -169,6 +171,6 @@ f_serial_hash.write(str(current_serial_hash))
 f_serial_hash.truncate()
 f_serial_hash.close()
 
-print(f"Wrote everything to {export_file}")
+print(f"Wrote everything to {export_file}\n")
 
 os._exit(0)
