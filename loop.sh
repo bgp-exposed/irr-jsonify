@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ -z "$IRR_DB" || -z "$IRR_SERIALHASH" || -z "$IRR_DB_FOLDER" || -z "$IRR_JSON" ]]; then
+if [[ -z "$IRR_DB" || -z "$IRR_SERIALHASH" || -z "$IRR_DB_FOLDER" || -z "$IRR_JSON" || -z "$IRR_GOB" ]]; then
     echo "Must define environment variables" 1>&2
     exit 1
 fi
@@ -20,7 +20,11 @@ do
 	echo ""
     date
     $dir/irrdownload.py $IRR_DB $IRR_SERIALHASH $IRR_DB_FOLDER
-    $dir/irr2json.py $IRR_DB $IRR_SERIALHASH $IRR_JSON
+    exec 5>&1
+    IRR2JSON_OUTPUT=$($dir/irr2json.py $IRR_DB $IRR_SERIALHASH $IRR_JSON | tee >(cat - >&5))
+    if grep -qv "nothing" <<< "$(echo $IRR2JSON_OUTPUT | tail -1)"; then
+        $dir/convertroas -input $IRR_JSON -output $IRR_GOB
+    fi
     echo "Sleeping for $int seconds..."
 	sleep $int
 done
