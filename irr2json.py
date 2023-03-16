@@ -65,6 +65,7 @@ if os.path.exists(export_file):
 with open(export_file, "w") as f_out:
     f_out.writelines([
         "{\n",
+        "    \"placeholder\": []\n",
         "    \"roas\": ["
     ])
 
@@ -91,9 +92,9 @@ with open(export_file, "w") as f_out:
                 if attrib.startswith("origin"):
                     val = val.replace("AS", "")
                     if "." not in val:
-                        asn = f"AS{val}"
+                        asn = int(val)
                     else:
-                        asn = f"AS{asdot_to_asplain(val)}"
+                        asn = asdot_to_asplain(val)
                     next_proc_item = "source"
 
                 if attrib.startswith("source"):
@@ -114,7 +115,7 @@ with open(export_file, "w") as f_out:
                     prefixlen = int(prefix.split("/")[1])
 
                 if prefixlen <= maxlen:
-                    f_out.write(f"\n        {{\"asn\": \"{asn}\", \"prefix\": \"{prefix}\", \"maxLength\": {maxlen}, \"ta\": \"{source}\"}},")
+                    f_out.write(f"\n        {{\"asn\": {asn}, \"prefix\": \"{prefix}\", \"maxLength\": {maxlen}, \"ta\": \"{source}\"}},")
                     proc_cnt += 1
                 prefix = None
                 asn = None
