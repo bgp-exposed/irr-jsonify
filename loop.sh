@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 irr_cache_folder=${IRR_CACHE_FOLDER:-./cache}
 irr_db=${IRR_DB:-$irr_cache_folder/irr.db}
 irr_serialhash=${IRR_SERIALHASH:-$irr_cache_folder/IRR.SERIALHASH}

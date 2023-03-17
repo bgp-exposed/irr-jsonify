@@ -23,6 +23,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - uses: robinraju/release-downloader@v1.7
+        with: 
+          repository: "bgp-exposed/roa-trie"
+          tag: "v1.0.1"
+          fileName: "convertroas"
+          tarBall: false
+          zipBall: false
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+
       - name: Log in to the Container registry
         uses: docker/login-action@v2.1.0
         with:

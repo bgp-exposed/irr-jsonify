@@ -8,8 +8,10 @@ ENV IRR_JSON=$IRR_CACHE_FOLDER/irr.json
 ENV IRR_GOB=$IRR_CACHE_FOLDER/irr.gob
 ENV INTERVAL=600
 
-COPY irrdownload.py irr2json.py loop.sh /opt/
+RUN apk --no-cache add bash
 
-ADD https://github.com/bgp-exposed/roa-trie/releases/download/v1.0.1/convertroas /opt/
+COPY irrdownload.py irr2json.py loop.sh convertroas /opt/
 
-ENTRYPOINT ["/bin/sh", "/opt/loop.sh"]
+RUN chmod +x /opt/convertroas
+
+ENTRYPOINT ["/opt/loop.sh"]
