@@ -10,6 +10,6 @@ ENV INTERVAL=600
 
 COPY irrdownload.py irr2json.py loop.sh /opt/
 
-ADD https://github.com/bgp-exposed/roa-trie/releases/download/v1.0.0/convertroas /opt/
+ADD https://github.com/bgp-exposed/roa-trie/releases/download/v1.0.1/convertroas /opt/
 
 ENTRYPOINT ["/bin/sh", "/opt/loop.sh"]
